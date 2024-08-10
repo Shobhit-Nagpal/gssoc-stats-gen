@@ -46,11 +46,12 @@ export async function POST(req: NextRequest) {
     ctx.fillText(pullRequests.toString() + " PRs", certificateImg.width * 0.57, certificateImg.height * 0.30);
     ctx.fillText(score.toString() + " pts", certificateImg.width * 0.64, certificateImg.height * 0.30);
     
-    ctx.font = 'bold 24px Arial';
-    ctx.fillText(rank.toString(), certificateImg.width * 0.235, certificateImg.height * 0.76);
-    ctx.fillText(score.toString(), certificateImg.width * 0.435, certificateImg.height * 0.76);
-    ctx.fillText(pullRequests.toString(), certificateImg.width * 0.670, certificateImg.height * 0.76);
-    ctx.fillText(badges.toString(), certificateImg.width * 0.875, certificateImg.height * 0.76);
+    ctx.font = 'bold 20px Arial';
+    ctx.fillStyle = 'white';
+    ctx.fillText(rank.toString(), certificateImg.width * 0.235, certificateImg.height * 0.758);
+    ctx.fillText(score.toString(), certificateImg.width * 0.435, certificateImg.height * 0.758);
+    ctx.fillText(pullRequests.toString(), certificateImg.width * 0.670, certificateImg.height * 0.758);
+    ctx.fillText(badges.toString(), certificateImg.width * 0.875, certificateImg.height * 0.758);
 
     const buffer = canvas.toBuffer('image/png');
 

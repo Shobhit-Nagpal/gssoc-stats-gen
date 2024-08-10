@@ -1,27 +1,38 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import React, { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useToast } from "./ui/use-toast";
 
 const formSchema = z.object({
   rank: z.number().min(1, { message: "Rank is required." }),
   score: z.number().min(1, { message: "Score is required." }),
   pullRequests: z.number().min(1, { message: "Pull Requests is required." }),
   badges: z.number().min(1, { message: "Badges is required." }),
-  githubUsername: z.string().min(1, { message: "GitHub username is required." }),
+  githubUsername: z
+    .string()
+    .min(1, { message: "GitHub username is required." }),
   profilePicUrl: z.string().url({ message: "Must be a valid URL." }),
-})
+});
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof formSchema>;
 
 const ImageTextForm: React.FC = () => {
-  const [resultImage, setResultImage] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast();
+  const [resultImage, setResultImage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -33,33 +44,41 @@ const ImageTextForm: React.FC = () => {
       githubUsername: "",
       profilePicUrl: "",
     },
-  })
+  });
 
   const onSubmit = async (values: FormValues) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const response = await fetch('/api/generate', {
-        method: 'POST',
+      const response = await fetch("/api/generate", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error('Failed to generate certificate')
+        throw new Error("Failed to generate certificate");
       }
 
-      const blob = await response.blob()
-      const imageUrl = URL.createObjectURL(blob)
-      setResultImage(imageUrl)
+      const blob = await response.blob();
+      const imageUrl = URL.createObjectURL(blob);
+      setResultImage(imageUrl);
+      toast({
+        title: "Generated certificate!",
+      });
     } catch (error) {
-      console.error('Error generating certificate:', error)
+      console.error("Error generating certificate:", error);
       // Here you might want to set an error state and display it to the user
+      toast({
+        title: "Something went wrong!",
+        description: "Couldn't generate your stats :(",
+        variant: "destructive",
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="space-y-8">
@@ -72,7 +91,12 @@ const ImageTextForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Rank</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Enter rank" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                  <Input
+                    type="number"
+                    placeholder="Enter rank"
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -85,7 +109,12 @@ const ImageTextForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Score</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Enter score" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                  <Input
+                    type="number"
+                    placeholder="Enter score"
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -98,7 +127,12 @@ const ImageTextForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Pull Requests</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Enter number of pull requests" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                  <Input
+                    type="number"
+                    placeholder="Enter number of pull requests"
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -111,7 +145,12 @@ const ImageTextForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Badges</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Enter number of badges" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                  <Input
+                    type="number"
+                    placeholder="Enter number of badges"
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -144,13 +183,19 @@ const ImageTextForm: React.FC = () => {
             )}
           />
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? 'Generating...' : 'Generate Certificate'}
+            {isLoading ? "Generating..." : "Generate Certificate"}
           </Button>
         </form>
       </Form>
-      {resultImage && <img src={resultImage} alt="Generated Certificate" className="mt-4 w-full" />}
+      {resultImage && (
+        <img
+          src={resultImage}
+          alt="Generated Certificate"
+          className="mt-4 w-full"
+        />
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default ImageTextForm
+export default ImageTextForm;

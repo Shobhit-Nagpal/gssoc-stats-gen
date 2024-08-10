@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     ctx.fillStyle = 'white';
     ctx.fillText(rank.toString(), certificateImg.width * 0.235, certificateImg.height * 0.758);
     ctx.fillText(score.toString(), certificateImg.width * 0.430, certificateImg.height * 0.757);
-    ctx.fillText(pullRequests.toString(), certificateImg.width * 0.670, certificateImg.height * 0.758);
+    ctx.fillText(pullRequests.toString(), certificateImg.width * 0.666, certificateImg.height * 0.758);
     ctx.fillText(badges.toString(), certificateImg.width * 0.875, certificateImg.height * 0.758);
 
     const buffer = canvas.toBuffer('image/png');

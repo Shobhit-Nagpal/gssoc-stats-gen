@@ -18,9 +18,9 @@ export async function POST(req: NextRequest) {
     ctx.drawImage(certificateImg, 0, 0);
 
     // Draw profile picture (circular)
-    const profileSize = Math.min(certificateImg.width, certificateImg.height) * 0.15;
-    const profileX = certificateImg.width * 0.09;
-    const profileY = certificateImg.height * 0.16;
+    const profileSize = Math.min(certificateImg.width, certificateImg.height) * 0.10;
+    const profileX = certificateImg.width * 0.22;
+    const profileY = certificateImg.height * 0.24;
     ctx.save();
     ctx.beginPath();
     ctx.arc(profileX + profileSize / 2, profileY + profileSize / 2, profileSize / 2, 0, Math.PI * 2, true);
@@ -31,13 +31,14 @@ export async function POST(req: NextRequest) {
 
     // Add text
     ctx.fillStyle = 'black';
-    ctx.font = 'bold 20px Arial';
-    ctx.fillText(githubUsername, certificateImg.width * 0.18, certificateImg.height * 0.20);
+    ctx.font = 'bold 18px Arial';
+    ctx.fillText(githubUsername, certificateImg.width * 0.38, certificateImg.height * 0.30);
     
     ctx.font = 'bold 24px Arial';
-    ctx.fillText(rank.toString(), certificateImg.width * 0.22, certificateImg.height * 0.72);
-    ctx.fillText(score.toString(), certificateImg.width * 0.47, certificateImg.height * 0.72);
-    ctx.fillText(pullRequests.toString(), certificateImg.width * 0.72, certificateImg.height * 0.72);
+    ctx.fillText(rank.toString(), certificateImg.width * 0.235, certificateImg.height * 0.76);
+    ctx.fillText(score.toString(), certificateImg.width * 0.435, certificateImg.height * 0.76);
+    ctx.fillText(pullRequests.toString(), certificateImg.width * 0.670, certificateImg.height * 0.76);
+    ctx.fillText(badges.toString(), certificateImg.width * 0.875, certificateImg.height * 0.76);
     ctx.fillText(badges.toString(), certificateImg.width * 0.92, certificateImg.height * 0.72);
 
     const buffer = canvas.toBuffer('image/png');

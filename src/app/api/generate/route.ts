@@ -43,6 +43,8 @@ export async function POST(req: NextRequest) {
     ctx.font = 'bold 18px Arial';
     ctx.fillText(rank.toString(), certificateImg.width * 0.165, certificateImg.height * 0.30);
     ctx.fillText(githubUsername, certificateImg.width * 0.38, certificateImg.height * 0.30);
+    ctx.fillText(pullRequests.toString() + " PRs", certificateImg.width * 0.57, certificateImg.height * 0.30);
+    ctx.fillText(score.toString() + " pts", certificateImg.width * 0.64, certificateImg.height * 0.30);
     
     ctx.font = 'bold 24px Arial';
     ctx.fillText(rank.toString(), certificateImg.width * 0.235, certificateImg.height * 0.76);

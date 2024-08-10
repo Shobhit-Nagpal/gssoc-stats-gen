@@ -183,7 +183,7 @@ const ImageTextForm: React.FC = () => {
             )}
           />
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Generating..." : "Generate Certificate"}
+            {isLoading ? "Generating..." : "Generate"}
           </Button>
         </form>
       </Form>

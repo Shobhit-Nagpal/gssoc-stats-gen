@@ -53,6 +53,10 @@ export async function POST(req: NextRequest) {
     ctx.fillText(pullRequests.toString(), certificateImg.width * 0.666, certificateImg.height * 0.758);
     ctx.fillText(badges.toString(), certificateImg.width * 0.875, certificateImg.height * 0.758);
 
+    ctx.fillStyle = '#545454';
+    ctx.font = '12px Arial';
+    ctx.fillText(githubUsername, certificateImg.width * 0.42, certificateImg.height * 0.935);
+
     const buffer = canvas.toBuffer('image/png');
 
     return new NextResponse(buffer, {

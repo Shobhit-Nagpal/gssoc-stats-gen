@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { ModeToggle } from "./theme-button";
-import { CakeIcon } from "lucide-react";
+import Image from "next/image";
 
 export default function Navbar() {
   return (
@@ -11,7 +11,13 @@ export default function Navbar() {
         className="flex items-center justify-center"
         prefetch={false}
       >
-        <CakeIcon className="h-6 w-6 text-white" />
+        <Image
+          alt="GSSoC Logo"
+          src="/images/logo.png"
+          width={10}
+          height={10}
+          className="h-12 w-12 text-white"
+        />
       </Link>
       <div className="ml-auto flex items-center justify-center gap-4">
         <ModeToggle />
@@ -19,4 +25,3 @@ export default function Navbar() {
     </header>
   );
 }
-

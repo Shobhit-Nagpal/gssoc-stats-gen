@@ -1,13 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createCanvas, loadImage } from 'canvas';
+import path from 'path';
+import fs from 'fs/promises';
 
 export async function POST(req: NextRequest) {
   try {
-
     const { rank, score, pullRequests, badges, githubUsername, profilePicUrl } = await req.json();
 
+    // Load certificate image from the correct server path
+    const certificatePath = path.join(process.cwd(), 'public', 'certificate.png');
+    const certificateBuffer = await fs.readFile(certificatePath);
+
     const [certificateImg, profileImg] = await Promise.all([
-      loadImage('public/certificate.png'),
+      loadImage(certificateBuffer),
       loadImage(profilePicUrl)
     ]);
 
@@ -32,6 +37,8 @@ export async function POST(req: NextRequest) {
     // Add text
     ctx.fillStyle = 'black';
     ctx.font = 'bold 18px Arial';
+    ctx.fillText(rank.toString(), certificateImg.width * 0.165, certificateImg.height * 0.30);
+    ctx.fillText(githubUsername, certificateImg.width * 0.38, certificateImg.height * 0.30);
     ctx.fillText(githubUsername, certificateImg.width * 0.38, certificateImg.height * 0.30);
     
     ctx.font = 'bold 24px Arial';
@@ -39,7 +46,6 @@ export async function POST(req: NextRequest) {
     ctx.fillText(score.toString(), certificateImg.width * 0.435, certificateImg.height * 0.76);
     ctx.fillText(pullRequests.toString(), certificateImg.width * 0.670, certificateImg.height * 0.76);
     ctx.fillText(badges.toString(), certificateImg.width * 0.875, certificateImg.height * 0.76);
-    ctx.fillText(badges.toString(), certificateImg.width * 0.92, certificateImg.height * 0.72);
 
     const buffer = canvas.toBuffer('image/png');
 
@@ -50,7 +56,6 @@ export async function POST(req: NextRequest) {
         'Content-Disposition': 'inline; filename="certificate.png"'
       }
     });
-
   } catch (error) {
     console.error('Error generating certificate:', error);
     return NextResponse.json(

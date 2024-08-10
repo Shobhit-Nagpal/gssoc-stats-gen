@@ -20,7 +20,7 @@ const formSchema = z.object({
   rank: z.number().min(1, { message: "Rank is required." }),
   score: z.number().min(1, { message: "Score is required." }),
   pullRequests: z.number().min(1, { message: "Pull Requests is required." }),
-  badges: z.number().min(1, { message: "Badges is required." }),
+  badges: z.number().min(0, { message: "Badges is required." }).max(7),
   githubUsername: z
     .string()
     .min(1, { message: "GitHub username is required." }),
@@ -71,7 +71,7 @@ const ImageTextForm: React.FC = () => {
       console.error("Error generating certificate:", error);
       // Here you might want to set an error state and display it to the user
       toast({
-        title: "Something went wrong!",
+        title: "Something went wrong! Try again",
         description: "Couldn't generate your stats :(",
         variant: "destructive",
       });

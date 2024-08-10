@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     registerFont(fontPath, { family: 'Arial' });
 
     // Load certificate image from the correct server path
-    const certificatePath = path.join(process.cwd(), 'public', 'certificate.png');
+    const certificatePath = path.join(process.cwd(), 'public', 'images', 'certificate.png');
     const certificateBuffer = await fs.readFile(certificatePath);
 
     const [certificateImg, profileImg] = await Promise.all([
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     ctx.font = 'bold 20px Arial';
     ctx.fillStyle = 'white';
     ctx.fillText(rank.toString(), certificateImg.width * 0.235, certificateImg.height * 0.758);
-    ctx.fillText(score.toString(), certificateImg.width * 0.435, certificateImg.height * 0.758);
+    ctx.fillText(score.toString(), certificateImg.width * 0.430, certificateImg.height * 0.757);
     ctx.fillText(pullRequests.toString(), certificateImg.width * 0.670, certificateImg.height * 0.758);
     ctx.fillText(badges.toString(), certificateImg.width * 0.875, certificateImg.height * 0.758);
 

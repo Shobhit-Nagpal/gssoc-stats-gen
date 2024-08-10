@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createCanvas, loadImage } from 'canvas';
+import { createCanvas, loadImage, registerFont } from 'canvas';
 import path from 'path';
 import fs from 'fs/promises';
 
 export async function POST(req: NextRequest) {
   try {
     const { rank, score, pullRequests, badges, githubUsername, profilePicUrl } = await req.json();
+
+    // Register a font that supports a wide range of characters
+    const fontPath = path.join(process.cwd(), 'public', 'fonts', 'arial.ttf');
+    registerFont(fontPath, { family: 'Arial' });
 
     // Load certificate image from the correct server path
     const certificatePath = path.join(process.cwd(), 'public', 'certificate.png');
@@ -38,7 +42,6 @@ export async function POST(req: NextRequest) {
     ctx.fillStyle = 'black';
     ctx.font = 'bold 18px Arial';
     ctx.fillText(rank.toString(), certificateImg.width * 0.165, certificateImg.height * 0.30);
-    ctx.fillText(githubUsername, certificateImg.width * 0.38, certificateImg.height * 0.30);
     ctx.fillText(githubUsername, certificateImg.width * 0.38, certificateImg.height * 0.30);
     
     ctx.font = 'bold 24px Arial';

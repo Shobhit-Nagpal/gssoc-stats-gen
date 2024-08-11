@@ -14,17 +14,25 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "./ui/use-toast";
 
 const formSchema = z.object({
-  rank: z.number().min(1, { message: "Rank is required." }),
-  score: z.number().min(1, { message: "Score is required." }),
-  pullRequests: z.number().min(1, { message: "Pull Requests is required." }),
-  badges: z.number().min(0, { message: "Badges is required." }).max(7),
+  rank: z.number().min(1, { message: "Rank is required." }).optional(),
+  score: z.number().min(1, { message: "Score is required." }).optional(),
+  pullRequests: z
+    .number()
+    .min(1, { message: "Pull Requests is required." })
+    .optional(),
+  badges: z
+    .number()
+    .min(0, { message: "Badges is required." })
+    .max(7)
+    .optional(),
   githubUsername: z
     .string()
     .min(1, { message: "GitHub username is required." }),
-  profilePicUrl: z.string().url({ message: "Must be a valid URL." }),
+  postmanBadge: z.boolean().default(false),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -37,24 +45,61 @@ const ImageTextForm: React.FC = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      rank: 0,
-      score: 0,
-      pullRequests: 0,
-      badges: 0,
+      rank: undefined,
+      score: undefined,
+      pullRequests: undefined,
+      badges: undefined,
       githubUsername: "",
-      profilePicUrl: "",
+      postmanBadge: false,
     },
   });
 
+  const fetchGitHubAvatar = async (username: string): Promise<string> => {
+    const response = await fetch(`https://api.github.com/users/${username}`);
+    if (!response.ok) {
+      toast({
+        title: "Check GitHub username",
+        description: "Couldn't fetch GitHub details",
+        variant: "destructive",
+      });
+      return `https://avatar.iran.liara.run/public/boy?username=${username}`;
+    }
+    const userData = await response.json();
+    return userData.avatar_url;
+  };
+
   const onSubmit = async (values: FormValues) => {
+    // Check for empty fields
+    const emptyFields = Object.entries(values).filter(([key, value]) => {
+      if (key === "postmanBadge") return false; // Skip postmanBadge as it's a boolean
+      return value === undefined || value === "";
+    });
+
+    if (emptyFields.length > 0) {
+      const emptyFieldNames = emptyFields
+        .map(([key]) => key.charAt(0).toUpperCase() + key.slice(1))
+        .join(", ");
+      toast({
+        title: "Missing Information",
+        description: `Please fill in the following field(s): ${emptyFieldNames}`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
+      const avatarUrl = await fetchGitHubAvatar(values.githubUsername);
+
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          ...values,
+          profilePicUrl: avatarUrl,
+        }),
       });
 
       if (!response.ok) {
@@ -69,7 +114,6 @@ const ImageTextForm: React.FC = () => {
       });
     } catch (error) {
       console.error("Error generating certificate:", error);
-      // Here you might want to set an error state and display it to the user
       toast({
         title: "Something went wrong! Try again",
         description: "Couldn't generate your stats :(",
@@ -77,6 +121,17 @@ const ImageTextForm: React.FC = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDownload = () => {
+    if (resultImage) {
+      const link = document.createElement("a");
+      link.href = resultImage;
+      link.download = "GSSoC24_Stats.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
 
@@ -95,7 +150,11 @@ const ImageTextForm: React.FC = () => {
                     type="number"
                     placeholder="Enter rank"
                     {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      field.onChange(value === "" ? undefined : Number(value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -113,7 +172,11 @@ const ImageTextForm: React.FC = () => {
                     type="number"
                     placeholder="Enter score"
                     {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      field.onChange(value === "" ? undefined : Number(value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -131,7 +194,11 @@ const ImageTextForm: React.FC = () => {
                     type="number"
                     placeholder="Enter number of pull requests"
                     {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      field.onChange(value === "" ? undefined : Number(value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -149,10 +216,31 @@ const ImageTextForm: React.FC = () => {
                     type="number"
                     placeholder="Enter number of badges"
                     {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      field.onChange(value === "" ? undefined : Number(value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="postmanBadge"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Did you get the Postman badge?</FormLabel>
+                </div>
               </FormItem>
             )}
           />
@@ -169,30 +257,22 @@ const ImageTextForm: React.FC = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="profilePicUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Profile Picture URL</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter profile picture URL" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Generating..." : "Generate Certificate"}
+            {isLoading ? "Generating..." : "Generate"}
           </Button>
         </form>
       </Form>
       {resultImage && (
-        <img
-          src={resultImage}
-          alt="Generated Certificate"
-          className="mt-4 w-full"
-        />
+        <div className="space-y-4">
+          <img
+            src={resultImage}
+            alt="Generated Certificate"
+            className="mt-4 w-full"
+          />
+          <Button onClick={handleDownload} className="w-full">
+            Download Certificate
+          </Button>
+        </div>
       )}
     </div>
   );

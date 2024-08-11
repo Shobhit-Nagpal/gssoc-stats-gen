@@ -53,7 +53,12 @@ export async function POST(req: NextRequest) {
     const totalBadges = postmanBadge ? badges + 1 : badges;
 
     // Register font
-    const fontPath = path.join(process.cwd(), "public", "fonts", "montserrat.ttf");
+    const fontPath = path.join(
+      process.cwd(),
+      "public",
+      "fonts",
+      "montserrat.ttf",
+    );
     registerFont(fontPath, { family: "Montserrat" });
 
     const [profileImg, badgeImages] = await Promise.all([
@@ -110,7 +115,7 @@ export async function POST(req: NextRequest) {
 
     // Draw bottom profile picture
     const bottomProfileX = canvas.width * 0.473;
-    const bottomProfileY = canvas.height * 0.80; // Adjust this value to position the bottom profile picture
+    const bottomProfileY = canvas.height * 0.8; // Adjust this value to position the bottom profile picture
     drawCircularProfile(bottomProfileX, bottomProfileY);
 
     // Add text
@@ -146,7 +151,12 @@ export async function POST(req: NextRequest) {
 
     ctx.fillStyle = "#545454";
     ctx.font = "12px Montserrat";
-    ctx.fillText(githubUsername, canvas.width * 0.405, canvas.height * 0.931);
+
+    ctx.fillText(
+      githubUsername,
+      canvas.width / 2 - (ctx.measureText(githubUsername).width + 10),
+      canvas.height * 0.931,
+    );
 
     const buffer = canvas.toBuffer("image/png");
     return new NextResponse(buffer, {

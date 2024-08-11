@@ -122,10 +122,10 @@ export async function POST(req: NextRequest) {
     ctx.fillStyle = "black";
     ctx.font = "bold 18px Montserrat";
     ctx.fillText(rank.toString(), canvas.width * 0.165, canvas.height * 0.3);
-    ctx.fillText(githubUsername, canvas.width * 0.38, canvas.height * 0.3);
+    ctx.fillText(githubUsername, canvas.width * 0.355, canvas.height * 0.3);
     ctx.fillText(
       pullRequests.toString() + "PRs",
-      canvas.width * 0.57,
+      canvas.width * 0.56,
       canvas.height * 0.3,
     );
     ctx.fillText(
@@ -136,17 +136,37 @@ export async function POST(req: NextRequest) {
 
     ctx.font = "bold 20px Montserrat";
     ctx.fillStyle = "white";
-    ctx.fillText(rank.toString(), canvas.width * 0.235, canvas.height * 0.757);
-    ctx.fillText(score.toString(), canvas.width * 0.43, canvas.height * 0.756);
+
+    if (rank < 1000) {
+      ctx.fillText(rank.toString(), canvas.width * 0.22, canvas.height * 0.756);
+    } else {
+      ctx.fillText(rank.toString(), canvas.width * 0.215, canvas.height * 0.756);
+    }
+
+    if (score < 1000) {
+      ctx.fillText(score.toString(), canvas.width * 0.415, canvas.height * 0.755);
+    } else {
+      ctx.fillText(score.toString(), canvas.width * 0.41, canvas.height * 0.755);
+    }
+
+    if (pullRequests < 100) {
     ctx.fillText(
       pullRequests.toString(),
-      canvas.width * 0.666,
-      canvas.height * 0.757,
+      canvas.width * 0.65,
+      canvas.height * 0.755,
     );
+    } else {
+    ctx.fillText(
+      pullRequests.toString(),
+      canvas.width * 0.645,
+      canvas.height * 0.755,
+    );
+
+    }
     ctx.fillText(
       totalBadges.toString(),
-      canvas.width * 0.875,
-      canvas.height * 0.757,
+      canvas.width * 0.86,
+      canvas.height * 0.756,
     );
 
     ctx.fillStyle = "#545454";

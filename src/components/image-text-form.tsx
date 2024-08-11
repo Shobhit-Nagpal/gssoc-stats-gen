@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "./ui/use-toast";
 
 const formSchema = z.object({
@@ -21,10 +22,9 @@ const formSchema = z.object({
   score: z.number().min(1, { message: "Score is required." }),
   pullRequests: z.number().min(1, { message: "Pull Requests is required." }),
   badges: z.number().min(0, { message: "Badges is required." }).max(7),
-  githubUsername: z
-    .string()
-    .min(1, { message: "GitHub username is required." }),
+  githubUsername: z.string().min(1, { message: "GitHub username is required." }),
   profilePicUrl: z.string().url({ message: "Must be a valid URL." }),
+  postmanBadge: z.boolean().default(false),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -43,6 +43,7 @@ const ImageTextForm: React.FC = () => {
       badges: 0,
       githubUsername: "",
       profilePicUrl: "",
+      postmanBadge: false,
     },
   });
 
@@ -69,7 +70,6 @@ const ImageTextForm: React.FC = () => {
       });
     } catch (error) {
       console.error("Error generating certificate:", error);
-      // Here you might want to set an error state and display it to the user
       toast({
         title: "Something went wrong! Try again",
         description: "Couldn't generate your stats :(",
@@ -153,6 +153,25 @@ const ImageTextForm: React.FC = () => {
                   />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="postmanBadge"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>
+                    Did you get the Postman badge?
+                  </FormLabel>
+                </div>
               </FormItem>
             )}
           />

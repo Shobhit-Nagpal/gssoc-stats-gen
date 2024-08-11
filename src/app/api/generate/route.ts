@@ -47,8 +47,11 @@ export async function POST(req: NextRequest) {
       badges,
       githubUsername,
       profilePicUrl,
-      hasPostmanBadge,
+      postmanBadge,
     } = await req.json();
+
+    // Adjust total badges count
+    const totalBadges = postmanBadge ? badges + 1 : badges;
 
     // Register font
     const fontPath = path.join(process.cwd(), "public", "fonts", "arial.ttf");
@@ -64,16 +67,16 @@ export async function POST(req: NextRequest) {
       loadBadgeImages(),
     ]);
 
-    // Select background image based on badges
+    // Select background image based on total badges
     let backgroundImg;
-    if (badges === 0) {
+    if (totalBadges === 0) {
       backgroundImg = badgeImages["certificate.png"];
-    } else if (badges > 7) {
+    } else if (totalBadges > 7) {
       backgroundImg = badgeImages["7.png"];
     } else {
-      const badgeFileName = hasPostmanBadge
-        ? `${badges}-postman.png`
-        : `${badges}.png`;
+      const badgeFileName = postmanBadge
+        ? `${totalBadges}-postman.png`
+        : `${totalBadges}.png`;
       backgroundImg = badgeImages[badgeFileName];
     }
 
@@ -93,7 +96,7 @@ export async function POST(req: NextRequest) {
     const logoX = canvas.width * 0.7;
     const logoY = profileY; // Same height as profile picture
 
-    if (badges === 0) {
+    if (totalBadges === 0) {
       // Draw logo
       ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
     }
@@ -140,7 +143,7 @@ export async function POST(req: NextRequest) {
       canvas.height * 0.758,
     );
     ctx.fillText(
-      badges.toString(),
+      totalBadges.toString(),
       canvas.width * 0.875,
       canvas.height * 0.758,
     );

@@ -18,11 +18,20 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "./ui/use-toast";
 
 const formSchema = z.object({
-  rank: z.number().min(1, { message: "Rank is required." }),
-  score: z.number().min(1, { message: "Score is required." }),
-  pullRequests: z.number().min(1, { message: "Pull Requests is required." }),
-  badges: z.number().min(0, { message: "Badges is required." }).max(7),
-  githubUsername: z.string().min(1, { message: "GitHub username is required." }),
+  rank: z.number().min(1, { message: "Rank is required." }).optional(),
+  score: z.number().min(1, { message: "Score is required." }).optional(),
+  pullRequests: z
+    .number()
+    .min(1, { message: "Pull Requests is required." })
+    .optional(),
+  badges: z
+    .number()
+    .min(0, { message: "Badges is required." })
+    .max(7)
+    .optional(),
+  githubUsername: z
+    .string()
+    .min(1, { message: "GitHub username is required." }),
   postmanBadge: z.boolean().default(false),
 });
 
@@ -36,10 +45,10 @@ const ImageTextForm: React.FC = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      rank: 0,
-      score: 0,
-      pullRequests: 0,
-      badges: 0,
+      rank: undefined,
+      score: undefined,
+      pullRequests: undefined,
+      badges: undefined,
       githubUsername: "",
       postmanBadge: false,
     },
@@ -51,8 +60,8 @@ const ImageTextForm: React.FC = () => {
       toast({
         title: "Check GitHub username",
         description: "Couldn't fetch GitHub details",
-        variant: "destructive"
-      })
+        variant: "destructive",
+      });
       return `https://avatar.iran.liara.run/public/boy?username=${username}`;
     }
     const userData = await response.json();
@@ -60,10 +69,28 @@ const ImageTextForm: React.FC = () => {
   };
 
   const onSubmit = async (values: FormValues) => {
+    // Check for empty fields
+    const emptyFields = Object.entries(values).filter(([key, value]) => {
+      if (key === "postmanBadge") return false; // Skip postmanBadge as it's a boolean
+      return value === undefined || value === "";
+    });
+
+    if (emptyFields.length > 0) {
+      const emptyFieldNames = emptyFields
+        .map(([key]) => key.charAt(0).toUpperCase() + key.slice(1))
+        .join(", ");
+      toast({
+        title: "Missing Information",
+        description: `Please fill in the following field(s): ${emptyFieldNames}`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
       const avatarUrl = await fetchGitHubAvatar(values.githubUsername);
-      
+
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
@@ -123,7 +150,11 @@ const ImageTextForm: React.FC = () => {
                     type="number"
                     placeholder="Enter rank"
                     {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      field.onChange(value === "" ? undefined : Number(value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -141,7 +172,11 @@ const ImageTextForm: React.FC = () => {
                     type="number"
                     placeholder="Enter score"
                     {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      field.onChange(value === "" ? undefined : Number(value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -159,7 +194,11 @@ const ImageTextForm: React.FC = () => {
                     type="number"
                     placeholder="Enter number of pull requests"
                     {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      field.onChange(value === "" ? undefined : Number(value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -177,7 +216,11 @@ const ImageTextForm: React.FC = () => {
                     type="number"
                     placeholder="Enter number of badges"
                     {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      field.onChange(value === "" ? undefined : Number(value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage />

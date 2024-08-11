@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
     } else if (badges === 0 && postmanBadge) {
       backgroundImg = badgeImages["postman.png"];
     } else if (totalBadges > 7) {
-      backgroundImg = badgeImages["7.png"];
+      backgroundImg = badgeImages["7-postman.png"];
     } else {
       const badgeFileName = postmanBadge
         ? `${badges}-postman.png`

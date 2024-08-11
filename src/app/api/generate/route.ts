@@ -87,26 +87,31 @@ export async function POST(req: NextRequest) {
     const profileX = canvas.width * 0.22;
     const profileY = canvas.height * 0.24;
 
-    // Calculate logo size and position
-    const logoSize = profileSize;
-    const logoX = canvas.width * 0.7;
-    const logoY = profileY; // Same height as profile picture
+    // Function to draw circular profile picture
+    const drawCircularProfile = (x: number, y: number) => {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(
+        x + profileSize / 2,
+        y + profileSize / 2,
+        profileSize / 2,
+        0,
+        Math.PI * 2,
+        true,
+      );
+      ctx.closePath();
+      ctx.clip();
+      ctx.drawImage(profileImg, x, y, profileSize, profileSize);
+      ctx.restore();
+    };
 
-    // Draw profile picture (circular)
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(
-      profileX + profileSize / 2,
-      profileY + profileSize / 2,
-      profileSize / 2,
-      0,
-      Math.PI * 2,
-      true,
-    );
-    ctx.closePath();
-    ctx.clip();
-    ctx.drawImage(profileImg, profileX, profileY, profileSize, profileSize);
-    ctx.restore();
+    // Draw top profile picture
+    drawCircularProfile(profileX, profileY);
+
+    // Draw bottom profile picture
+    const bottomProfileX = canvas.width * 0.473;
+    const bottomProfileY = canvas.height * 0.80; // Adjust this value to position the bottom profile picture
+    drawCircularProfile(bottomProfileX, bottomProfileY);
 
     // Add text
     ctx.fillStyle = "black";

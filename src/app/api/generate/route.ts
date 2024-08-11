@@ -57,20 +57,17 @@ export async function POST(req: NextRequest) {
     const fontPath = path.join(process.cwd(), "public", "fonts", "arial.ttf");
     registerFont(fontPath, { family: "Arial" });
 
-    // Load logo
-    const logoPath = path.join(process.cwd(), "public", "images", "logo.png");
-    const logoBuffer = await fs.readFile(logoPath);
-
-    const [profileImg, logoImg, badgeImages] = await Promise.all([
+    const [profileImg, badgeImages] = await Promise.all([
       loadImage(profilePicUrl),
-      loadImage(logoBuffer),
       loadBadgeImages(),
     ]);
 
     // Select background image based on total badges
     let backgroundImg;
-    if (totalBadges === 0) {
-      backgroundImg = badgeImages["certificate.png"];
+    if (badges === 0 && !postmanBadge) {
+      backgroundImg = badgeImages["nobadge.png"];
+    } else if (badges === 0 && postmanBadge) {
+      backgroundImg = badgeImages["postman.png"];
     } else if (totalBadges > 7) {
       backgroundImg = badgeImages["7.png"];
     } else {
@@ -95,11 +92,6 @@ export async function POST(req: NextRequest) {
     const logoSize = profileSize;
     const logoX = canvas.width * 0.7;
     const logoY = profileY; // Same height as profile picture
-
-    if (totalBadges === 0) {
-      // Draw logo
-      ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
-    }
 
     // Draw profile picture (circular)
     ctx.save();

@@ -26,7 +26,6 @@ async function loadBadgeImages(): Promise<BadgeImages> {
     "7.png",
     "nobadge.png",
     "postman.png",
-    "certificate.png",
   ];
 
   for (const file of badgeFiles) {

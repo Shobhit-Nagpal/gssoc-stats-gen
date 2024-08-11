@@ -22,10 +22,7 @@ const formSchema = z.object({
   score: z.number().min(1, { message: "Score is required." }),
   pullRequests: z.number().min(1, { message: "Pull Requests is required." }),
   badges: z.number().min(0, { message: "Badges is required." }).max(7),
-  githubUsername: z
-    .string()
-    .min(1, { message: "GitHub username is required." }),
-  profilePicUrl: z.string().url({ message: "Must be a valid URL." }),
+  githubUsername: z.string().min(1, { message: "GitHub username is required." }),
   postmanBadge: z.boolean().default(false),
 });
 
@@ -44,20 +41,38 @@ const ImageTextForm: React.FC = () => {
       pullRequests: 0,
       badges: 0,
       githubUsername: "",
-      profilePicUrl: "",
       postmanBadge: false,
     },
   });
 
+  const fetchGitHubAvatar = async (username: string): Promise<string> => {
+    const response = await fetch(`https://api.github.com/users/${username}`);
+    if (!response.ok) {
+      toast({
+        title: "Check GitHub username",
+        description: "Couldn't fetch GitHub details",
+        variant: "destructive"
+      })
+      return `https://avatar.iran.liara.run/public/boy?username=${username}`;
+    }
+    const userData = await response.json();
+    return userData.avatar_url;
+  };
+
   const onSubmit = async (values: FormValues) => {
     setIsLoading(true);
     try {
+      const avatarUrl = await fetchGitHubAvatar(values.githubUsername);
+      
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          ...values,
+          profilePicUrl: avatarUrl,
+        }),
       });
 
       if (!response.ok) {
@@ -194,19 +209,6 @@ const ImageTextForm: React.FC = () => {
                 <FormLabel>GitHub Username</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter GitHub username" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="profilePicUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Profile Picture URL</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter profile picture URL" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

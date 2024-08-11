@@ -53,8 +53,8 @@ export async function POST(req: NextRequest) {
     const totalBadges = postmanBadge ? badges + 1 : badges;
 
     // Register font
-    const fontPath = path.join(process.cwd(), "public", "fonts", "arial.ttf");
-    registerFont(fontPath, { family: "Arial" });
+    const fontPath = path.join(process.cwd(), "public", "fonts", "montserrat.ttf");
+    registerFont(fontPath, { family: "Montserrat" });
 
     const [profileImg, badgeImages] = await Promise.all([
       loadImage(profilePicUrl),
@@ -115,38 +115,38 @@ export async function POST(req: NextRequest) {
 
     // Add text
     ctx.fillStyle = "black";
-    ctx.font = "bold 18px Arial";
+    ctx.font = "bold 18px Montserrat";
     ctx.fillText(rank.toString(), canvas.width * 0.165, canvas.height * 0.3);
     ctx.fillText(githubUsername, canvas.width * 0.38, canvas.height * 0.3);
     ctx.fillText(
-      pullRequests.toString() + " PRs",
+      pullRequests.toString() + "PRs",
       canvas.width * 0.57,
       canvas.height * 0.3,
     );
     ctx.fillText(
-      score.toString() + " pts",
+      score.toString() + "pts",
       canvas.width * 0.64,
       canvas.height * 0.3,
     );
 
-    ctx.font = "bold 20px Arial";
+    ctx.font = "bold 20px Montserrat";
     ctx.fillStyle = "white";
-    ctx.fillText(rank.toString(), canvas.width * 0.235, canvas.height * 0.758);
-    ctx.fillText(score.toString(), canvas.width * 0.43, canvas.height * 0.757);
+    ctx.fillText(rank.toString(), canvas.width * 0.235, canvas.height * 0.757);
+    ctx.fillText(score.toString(), canvas.width * 0.43, canvas.height * 0.756);
     ctx.fillText(
       pullRequests.toString(),
       canvas.width * 0.666,
-      canvas.height * 0.758,
+      canvas.height * 0.757,
     );
     ctx.fillText(
       totalBadges.toString(),
       canvas.width * 0.875,
-      canvas.height * 0.758,
+      canvas.height * 0.757,
     );
 
     ctx.fillStyle = "#545454";
-    ctx.font = "12px Arial";
-    ctx.fillText(githubUsername, canvas.width * 0.42, canvas.height * 0.931);
+    ctx.font = "12px Montserrat";
+    ctx.fillText(githubUsername, canvas.width * 0.405, canvas.height * 0.931);
 
     const buffer = canvas.toBuffer("image/png");
     return new NextResponse(buffer, {

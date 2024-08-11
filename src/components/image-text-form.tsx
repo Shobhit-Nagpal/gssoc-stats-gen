@@ -22,7 +22,9 @@ const formSchema = z.object({
   score: z.number().min(1, { message: "Score is required." }),
   pullRequests: z.number().min(1, { message: "Pull Requests is required." }),
   badges: z.number().min(0, { message: "Badges is required." }).max(7),
-  githubUsername: z.string().min(1, { message: "GitHub username is required." }),
+  githubUsername: z
+    .string()
+    .min(1, { message: "GitHub username is required." }),
   profilePicUrl: z.string().url({ message: "Must be a valid URL." }),
   postmanBadge: z.boolean().default(false),
 });
@@ -77,6 +79,17 @@ const ImageTextForm: React.FC = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDownload = () => {
+    if (resultImage) {
+      const link = document.createElement("a");
+      link.href = resultImage;
+      link.download = "GSSoC24_Stats.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
 
@@ -168,9 +181,7 @@ const ImageTextForm: React.FC = () => {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>
-                    Did you get the Postman badge?
-                  </FormLabel>
+                  <FormLabel>Did you get the Postman badge?</FormLabel>
                 </div>
               </FormItem>
             )}
@@ -207,11 +218,16 @@ const ImageTextForm: React.FC = () => {
         </form>
       </Form>
       {resultImage && (
-        <img
-          src={resultImage}
-          alt="Generated Certificate"
-          className="mt-4 w-full"
-        />
+        <div className="space-y-4">
+          <img
+            src={resultImage}
+            alt="Generated Certificate"
+            className="mt-4 w-full"
+          />
+          <Button onClick={handleDownload} className="w-full">
+            Download Certificate
+          </Button>
+        </div>
       )}
     </div>
   );

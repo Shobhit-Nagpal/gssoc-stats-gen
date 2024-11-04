@@ -13,10 +13,10 @@ export default function Navbar() {
       >
         <Image
           alt="GSSoC Logo"
-          src="/images/logo.png"
-          width={10}
-          height={10}
-          className="h-12 w-12 text-white"
+          src="/images/gssoc-logo.png"
+          width={130}
+          height={130}
+          className="h-full w-full text-white"
         />
       </Link>
       <div className="ml-auto flex items-center justify-center gap-4">

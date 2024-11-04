@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
+import StarBanner from "@/components/star-banner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,7 +28,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          <div className="pt-16">{children}</div>
+          <div className="pt-16">
+            <StarBanner />
+            {children}
+          </div>
           <Toaster />
         </ThemeProvider>
       </body>

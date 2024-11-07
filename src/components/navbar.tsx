@@ -17,7 +17,14 @@ export default function Navbar() {
           src="/images/gssoc-logo.png"
           width={130}
           height={130}
-          className="h-full w-full text-white"
+          className="h-full w-full text-white hidden md:block"
+        />
+        <Image
+          alt="GSSoC Logo"
+          src="/images/gssoc-short-logo.png"
+          width={45}
+          height={45}
+          className="h-full w-full text-white block md:hidden"
         />
       </Link>
       <div className="ml-auto flex items-center justify-center gap-4">

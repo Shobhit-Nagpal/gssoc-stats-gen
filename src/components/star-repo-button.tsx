@@ -41,7 +41,7 @@ const StarRepoButton = () => {
         >
           <div className="flex items-center justify-center">
             <Star className="h-5 w-5 mr-2" />
-            <span className="font-bold md:text-base">Star Repo</span>
+            <span className="font-bold md:text-base">Star</span>
           </div>
         </Link>
       </span>

@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
-import StarBanner from "@/components/star-banner";
+import TipBanner from "@/components/tip-banner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +29,7 @@ export default function RootLayout({
         >
           <Navbar />
           <div className="pt-16">
-            <StarBanner />
+            <TipBanner />
             {children}
           </div>
           <Toaster />

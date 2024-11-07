@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { ModeToggle } from "./theme-button";
 import Image from "next/image";
+import StarRepoButton from "./star-repo-button";
 
 export default function Navbar() {
   return (
@@ -20,6 +21,7 @@ export default function Navbar() {
         />
       </Link>
       <div className="ml-auto flex items-center justify-center gap-4">
+        <StarRepoButton />
         <ModeToggle />
       </div>
     </header>

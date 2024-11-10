@@ -5,6 +5,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import TipBanner from "@/components/tip-banner";
+import { Footer } from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
             <TipBanner />
             {children}
           </div>
+          <Footer />
           <Toaster />
         </ThemeProvider>
       </body>

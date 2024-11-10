@@ -12,20 +12,9 @@ export default function Navbar() {
         className="flex items-center justify-center"
         prefetch={false}
       >
-        <Image
-          alt="GSSoC Logo"
-          src="/images/gssoc-logo.png"
-          width={130}
-          height={130}
-          className="h-full w-full text-white hidden md:block"
-        />
-        <Image
-          alt="GSSoC Logo"
-          src="/images/gssoc-short-logo.png"
-          width={45}
-          height={45}
-          className="h-full w-full text-white block md:hidden"
-        />
+        <h2 className="bg-gradient-to-r from-white to-yellow-600 inline-block text-transparent bg-clip-text font-bold">
+          Shobhit-Nagpal
+        </h2>
       </Link>
       <div className="ml-auto flex items-center justify-center gap-4">
         <StarRepoButton />

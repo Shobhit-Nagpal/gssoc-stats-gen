@@ -33,6 +33,7 @@ const formSchema = z.object({
     .string()
     .min(1, { message: "GitHub username is required." }),
   postmanBadge: z.boolean().default(false),
+  hackWeb3ConfBadge: z.boolean().default(false),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -51,6 +52,7 @@ const ImageTextForm: React.FC = () => {
       badges: undefined,
       githubUsername: "",
       postmanBadge: false,
+      hackWeb3ConfBadge: false,
     },
   });
 
@@ -240,6 +242,23 @@ const ImageTextForm: React.FC = () => {
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <FormLabel>Did you get the Postman badge?</FormLabel>
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="hackWeb3ConfBadge"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Did you get the Hack Web3Conf badge?</FormLabel>
                 </div>
               </FormItem>
             )}

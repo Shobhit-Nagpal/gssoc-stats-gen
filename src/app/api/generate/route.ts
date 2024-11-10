@@ -10,26 +10,35 @@ interface BadgeImages {
 async function loadBadgeImages(): Promise<BadgeImages> {
   const badgeImages: BadgeImages = {};
   const badgeFiles = [
+    "1-postman-web3.png",
     "1-postman.png",
     "1.png",
+    "2-postman-web3.png",
     "2-postman.png",
     "2.png",
+    "3-postman-web3.png",
     "3-postman.png",
     "3.png",
+    "4-postman-web3.png",
     "4-postman.png",
     "4.png",
+    "5-postman-web3.png",
     "5-postman.png",
     "5.png",
+    "6-postman-web3.png",
     "6-postman.png",
     "6.png",
+    "7-postman-web3.png",
     "7-postman.png",
     "7.png",
     "nobadge.png",
+    "postman-web3.png",
     "postman.png",
+    "web3.png",
   ];
 
   for (const file of badgeFiles) {
-    const filePath = path.join(process.cwd(), "public", "images", file);
+    const filePath = path.join(process.cwd(), "public", "images", "v2", file);
     const buffer = await fs.readFile(filePath);
     badgeImages[file] = await loadImage(buffer);
   }
@@ -140,28 +149,39 @@ export async function POST(req: NextRequest) {
     if (rank < 1000) {
       ctx.fillText(rank.toString(), canvas.width * 0.22, canvas.height * 0.756);
     } else {
-      ctx.fillText(rank.toString(), canvas.width * 0.215, canvas.height * 0.756);
+      ctx.fillText(
+        rank.toString(),
+        canvas.width * 0.215,
+        canvas.height * 0.756,
+      );
     }
 
     if (score < 1000) {
-      ctx.fillText(score.toString(), canvas.width * 0.415, canvas.height * 0.755);
+      ctx.fillText(
+        score.toString(),
+        canvas.width * 0.415,
+        canvas.height * 0.755,
+      );
     } else {
-      ctx.fillText(score.toString(), canvas.width * 0.41, canvas.height * 0.755);
+      ctx.fillText(
+        score.toString(),
+        canvas.width * 0.41,
+        canvas.height * 0.755,
+      );
     }
 
     if (pullRequests < 100) {
-    ctx.fillText(
-      pullRequests.toString(),
-      canvas.width * 0.65,
-      canvas.height * 0.755,
-    );
+      ctx.fillText(
+        pullRequests.toString(),
+        canvas.width * 0.65,
+        canvas.height * 0.755,
+      );
     } else {
-    ctx.fillText(
-      pullRequests.toString(),
-      canvas.width * 0.645,
-      canvas.height * 0.755,
-    );
-
+      ctx.fillText(
+        pullRequests.toString(),
+        canvas.width * 0.645,
+        canvas.height * 0.755,
+      );
     }
     ctx.fillText(
       totalBadges.toString(),

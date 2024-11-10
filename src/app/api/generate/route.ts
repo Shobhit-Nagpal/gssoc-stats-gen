@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
       backgroundImg = badgeImages["postman-web3.png"];
     } else if (totalBadges === 8) {
       if (postmanBadge && hackWeb3ConfBadge) {
-        backgroundImg = badgeImages["7-postman-web3.png"];
+        backgroundImg = badgeImages["6-postman-web3.png"];
       } else if (!postmanBadge && hackWeb3ConfBadge) {
         backgroundImg = badgeImages["7-web3.png"];
       } else {

@@ -23,7 +23,7 @@ export default function TermsOfService() {
           <p>
             You agree to use our service only for lawful purposes and in a way
             that does not infringe the rights of, restrict or inhibit anyone
-            else's use and enjoyment of the service.
+            else&apos;s use and enjoyment of the service.
           </p>
 
           <h3 className="text-xl font-semibold">3. Modifications to Service</h3>

@@ -18,11 +18,20 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "./ui/use-toast";
 
 const formSchema = z.object({
-  rank: z.number().min(1, { message: "Rank is required." }).optional(),
-  score: z.number().min(1, { message: "Score is required." }).optional(),
+  rank: z
+    .number()
+    .min(1, { message: "Rank is required." })
+    .max(3900, { message: "Maximum rank is 3900" })
+    .optional(),
+  score: z
+    .number()
+    .min(1, { message: "Score is required." })
+    .max(8020, { message: "Maximum score reached is 8020" })
+    .optional(),
   pullRequests: z
     .number()
     .min(1, { message: "Pull Requests is required." })
+    .max(256, { message: "Maximum PRs reached is 256" })
     .optional(),
   githubUsername: z
     .string()

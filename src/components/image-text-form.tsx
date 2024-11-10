@@ -24,11 +24,6 @@ const formSchema = z.object({
     .number()
     .min(1, { message: "Pull Requests is required." })
     .optional(),
-  badges: z
-    .number()
-    .min(0, { message: "Badges is required." })
-    .max(7)
-    .optional(),
   githubUsername: z
     .string()
     .min(1, { message: "GitHub username is required." }),
@@ -49,7 +44,6 @@ const ImageTextForm: React.FC = () => {
       rank: undefined,
       score: undefined,
       pullRequests: undefined,
-      badges: undefined,
       githubUsername: "",
       postmanBadge: false,
       hackWeb3ConfBadge: false,
@@ -195,28 +189,6 @@ const ImageTextForm: React.FC = () => {
                   <Input
                     type="number"
                     placeholder="Enter number of pull requests"
-                    {...field}
-                    value={field.value ?? ""}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      field.onChange(value === "" ? undefined : Number(value));
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="badges"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Badges</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Enter number of badges"
                     {...field}
                     value={field.value ?? ""}
                     onChange={(e) => {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createCanvas, loadImage, registerFont, Image } from "canvas";
 import path from "path";
 import fs from "fs/promises";
+import { getNumberOfBadges } from "@/utils/badges";
 
 interface BadgeImages {
   [key: string]: Image;
@@ -59,12 +60,13 @@ export async function POST(req: NextRequest) {
       rank,
       score,
       pullRequests,
-      badges,
       githubUsername,
       profilePicUrl,
       postmanBadge,
       hackWeb3ConfBadge,
     } = await req.json();
+
+    let badges = getNumberOfBadges(score);
 
     // Adjust total badges count
     let totalBadges = postmanBadge ? badges + 1 : badges;
@@ -94,13 +96,13 @@ export async function POST(req: NextRequest) {
       backgroundImg = badgeImages["web3.png"];
     } else if (badges === 0 && postmanBadge && hackWeb3ConfBadge) {
       backgroundImg = badgeImages["postman-web3.png"];
-    } else if (totalBadges > 7) {
-      if (totalBadges === 8) {
-      backgroundImg = hackWeb3ConfBadge
-        ? badgeImages["7-web3.png"]
-        : badgeImages["7-postman.png"];
+    } else if (totalBadges === 8) {
+      if (postmanBadge && hackWeb3ConfBadge) {
+        backgroundImg = badgeImages["7-postman-web3.png"];
+      } else if (!postmanBadge && hackWeb3ConfBadge) {
+        backgroundImg = badgeImages["7-web3.png"];
       } else {
-        backgroundImg = badgeImages["7-postman-web3.png"]
+        backgroundImg = badgeImages["7-postman.png"];
       }
     } else {
       let badgeFileName = postmanBadge ? `${badges}-postman` : `${badges}`;

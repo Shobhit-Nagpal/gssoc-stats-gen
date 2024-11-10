@@ -21,17 +21,17 @@ const formSchema = z.object({
   rank: z
     .number()
     .min(1, { message: "Rank is required." })
-    .max(3900, { message: "Maximum rank is 3900" })
+    .max(3928, { message: "Maximum rank is 3928" })
     .optional(),
   score: z
     .number()
     .min(1, { message: "Score is required." })
-    .max(8020, { message: "Maximum score reached is 8020" })
+    .max(8470, { message: "Maximum score reached is 8470" })
     .optional(),
   pullRequests: z
     .number()
     .min(1, { message: "Pull Requests is required." })
-    .max(256, { message: "Maximum PRs reached is 256" })
+    .max(266, { message: "Maximum PRs reached is 266" })
     .optional(),
   githubUsername: z
     .string()

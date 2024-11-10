@@ -11,24 +11,31 @@ async function loadBadgeImages(): Promise<BadgeImages> {
   const badgeImages: BadgeImages = {};
   const badgeFiles = [
     "1-postman-web3.png",
+    "1-web3.png",
     "1-postman.png",
     "1.png",
     "2-postman-web3.png",
+    "2-web3.png",
     "2-postman.png",
     "2.png",
     "3-postman-web3.png",
+    "3-web3.png",
     "3-postman.png",
     "3.png",
     "4-postman-web3.png",
+    "4-web3.png",
     "4-postman.png",
     "4.png",
     "5-postman-web3.png",
+    "5-web3.png",
     "5-postman.png",
     "5.png",
     "6-postman-web3.png",
+    "6-web3.png",
     "6-postman.png",
     "6.png",
     "7-postman-web3.png",
+    "7-web3.png",
     "7-postman.png",
     "7.png",
     "nobadge.png",
@@ -56,10 +63,12 @@ export async function POST(req: NextRequest) {
       githubUsername,
       profilePicUrl,
       postmanBadge,
+      hackWeb3ConfBadge,
     } = await req.json();
 
     // Adjust total badges count
-    const totalBadges = postmanBadge ? badges + 1 : badges;
+    let totalBadges = postmanBadge ? badges + 1 : badges;
+    totalBadges = hackWeb3ConfBadge ? totalBadges + 1 : totalBadges;
 
     // Register font
     const fontPath = path.join(
@@ -77,16 +86,28 @@ export async function POST(req: NextRequest) {
 
     // Select background image based on total badges
     let backgroundImg;
-    if (badges === 0 && !postmanBadge) {
+    if (badges === 0 && !postmanBadge && !hackWeb3ConfBadge) {
       backgroundImg = badgeImages["nobadge.png"];
-    } else if (badges === 0 && postmanBadge) {
+    } else if (badges === 0 && postmanBadge && !hackWeb3ConfBadge) {
       backgroundImg = badgeImages["postman.png"];
+    } else if (badges === 0 && !postmanBadge && hackWeb3ConfBadge) {
+      backgroundImg = badgeImages["web3.png"];
+    } else if (badges === 0 && postmanBadge && hackWeb3ConfBadge) {
+      backgroundImg = badgeImages["postman-web3.png"];
     } else if (totalBadges > 7) {
-      backgroundImg = badgeImages["7-postman.png"];
+      if (totalBadges === 8) {
+      backgroundImg = hackWeb3ConfBadge
+        ? badgeImages["7-web3.png"]
+        : badgeImages["7-postman.png"];
+      } else {
+        backgroundImg = badgeImages["7-postman-web3.png"]
+      }
     } else {
-      const badgeFileName = postmanBadge
-        ? `${badges}-postman.png`
-        : `${badges}.png`;
+      let badgeFileName = postmanBadge ? `${badges}-postman` : `${badges}`;
+      badgeFileName = hackWeb3ConfBadge
+        ? `${badgeFileName}-web3`
+        : `${badgeFileName}`;
+      badgeFileName = `${badgeFileName}.png`;
       backgroundImg = badgeImages[badgeFileName];
     }
 

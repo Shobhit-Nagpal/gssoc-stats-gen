@@ -25,8 +25,8 @@ A robust certificate generation tool built for GirlScript Summer of Code that ha
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/gsoc-certificate-generator.git
-cd gsoc-certificate-generator
+git clone https://github.com/Shobhit-Nagpal/gssoc-stats-gen.git
+cd gssoc-stats-gen
 ```
 
 2. Install dependencies:

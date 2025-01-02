@@ -12,6 +12,27 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "GSSoC Stats Generator",
   description: "Get your GSSoC stats in a few seconds.",
+  metadataBase: new URL("https://gssoc.shobhitnagpal.com"),
+  openGraph: {
+    title: "GSSoC Stats Generator",
+    description: "Get your GSSoC stats in a few seconds.",
+    url: "https://gssoc.shobhitnagpal.com",
+    locale: "en_US",
+    type: "website",
+    images: "/opengraph-image.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  verification: {
+    google: "google",
+    yandex: "yandex",
+    yahoo: "yahoo",
+    other: {
+      me: ["shobhitsnagpal@gmail.com", "https://www.shobhitnagpal.com"],
+    },
+  },
 };
 
 export default function RootLayout({
